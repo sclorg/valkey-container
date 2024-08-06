@@ -1,0 +1,31 @@
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  container-tests:
+    # This job only runs for '[test]' pull request comments by owner, member
+    runs-on: ubuntu-latest
+    name: "Container-tests: ${{ matrix.version }} - ${{ matrix.os_test }}"
+    concurrency:
+      group: container-${{ github.event.issue.number }}-${{ matrix.version }}-${{ matrix.os_test }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [  "7" ]
+        os_test: [ "fedora", "c10s" ]
+        test_case: [ "container" ]
+
+    if: |
+      github.event.issue.pull_request
+      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
+      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - uses: sclorg/tfaga-wrapper@main
+        with:
+          os_test: ${{ matrix.os_test }}
+          version: ${{ matrix.version }}
+          test_case: ${{ matrix.test_case }}
+          public_api_key: ${{ secrets.TF_PUBLIC_API_KEY }}
+          private_api_key: ${{ secrets.TF_INTERNAL_API_KEY }}
