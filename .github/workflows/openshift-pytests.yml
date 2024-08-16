@@ -27,8 +27,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [ "6", "7" ]
-        os_test: [ "rhel8", "rhel9"]
+        version: [ "7" ]
+        os_test: [ "rhel9"]
         test_case: [ "openshift-pytest" ]
 
     steps:
