@@ -14,26 +14,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "6/Dockerfile.c9s"
-            registry_namespace: "sclorg"
-            tag: "c9s"
-            image_name: "redis-6-c9s"
-            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            docker_context: "6"
-
           - dockerfile: "7/Dockerfile.fedora"
             registry_namespace: "fedora"
             tag: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            image_name: "redis-7"
+            image_name: "valkey-7"
             docker_context: "7"
 
-          - dockerfile: "7/Dockerfile.c9s"
+          - dockerfile: "7/Dockerfile.c10s"
             registry_namespace: "sclorg"
-            tag: "c9s"
-            image_name: "redis-7-c9s"
+            tag: "c10s"
+            image_name: "valkey-7-c10s"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             docker_context: "7"

@@ -1,1 +1,1 @@
-root/usr/share/container-scripts/redis/README.md
+root/usr/share/container-scripts/valkey/README.md

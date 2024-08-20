@@ -1,33 +1,15 @@
 ---
-- name: redis
-  pretty_name: Redis
+- name: valkey
+  pretty_name: Valkey
   sample_repo: ""
   category: database
   description: >-
-    Provides a Redis APP_VERSION database on DISTRO_NAME. For more information
+    Provides a Valkey APP_VERSION database on DISTRO_NAME. For more information
     about using this database image, including OpenShift considerations, see 
-    https://github.com/sclorg/redis-container/tree/master/APP_VERSION/README.md.
+    https://github.com/sclorg/valkey-container/tree/master/APP_VERSION/README.md.
   imagestream_files:
-  - filename: redis-centos.json
-    latest: "6-el9"
+  - filename: valkey-centos.json
+    latest: "7-el10"
     distros:
-      - name: CentOS Stream 9
-        app_versions: [6, 7]
-
-  - filename: redis-rhel.json
-    latest: "6-el8"
-    distros:
-      - name: RHEL 8
-        app_versions: [6]
-
-      - name: RHEL 9
-        app_versions: [6, 7]
-
-  - filename: redis-rhel-aarch64.json
-    latest: "6-el8"
-    distros:
-      - name: RHEL 8
-        app_versions: [6]
-
-      - name: RHEL 9
-        app_versions: [6, 7]
+      - name: CentOS Stream 10
+        app_versions: [7]

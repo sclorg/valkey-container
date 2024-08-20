@@ -26,24 +26,23 @@ run_doc_test
 run_bind_address_test
 run_no_bind_address_test
 "
-
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 source "${THISDIR}"/test-lib.sh
 
 function connection_works() {
   local container_ip="$1"; shift
   local password="$1"; shift
-  if [ "$(redis_cmd "$container_ip" "$password" ping)" == "PONG" ] ; then
+  if [ "$(valkey_cmd "$container_ip" "$password" ping)" == "PONG" ] ; then
     return 0
   fi
   return 1
 }
 
-function redis_cmd() {
+function valkey_cmd() {
   local container_ip="$1"; shift
   local password="$1"; shift
   # if empty password is given, then no password will be specified
-  docker run --rm "$IMAGE_NAME" redis-cli -h "$container_ip" ${password:+-a "$password"} "$@"
+  docker run --rm "$IMAGE_NAME" valkey-cli -h "$container_ip" ${password:+-a "$password"} "$@"
 }
 
 function test_connection() {
@@ -51,7 +50,7 @@ function test_connection() {
   local password=$1 ; shift
   local ip
   ip=$(ct_get_cip $name)
-  echo "  Testing Redis connection to $ip (password='${password:-}')..."
+  echo "  Testing Valkey connection to $ip (password='${password:-}')..."
   local max_attempts=10
   local sleep_time=2
   local i
@@ -69,16 +68,16 @@ function test_connection() {
   return 1
 }
 
-function test_redis() {
+function test_valkey() {
   local container_ip="$1"
   local password="$2"
 
-  echo "  Testing Redis (password='${password:-}')"
-  redis_cmd "$container_ip" "$password" set a 1 >/dev/null
+  echo "  Testing Valkey (password='${password:-}')"
+  valkey_cmd "$container_ip" "$password" set a 1 >/dev/null
   ct_check_testcase_result $?
-  redis_cmd "$container_ip" "$password" set b 2 >/dev/null
+  valkey_cmd "$container_ip" "$password" set b 2 >/dev/null
   ct_check_testcase_result $?
-  test "$(redis_cmd "$container_ip" "$password" get b)" == '2'
+  test "$(valkey_cmd "$container_ip" "$password" get b)" == '2'
   echo "  Success!"
   echo
 }
@@ -98,17 +97,17 @@ function run_change_password_test() {
   local tmpdir=$(mktemp -d)
   mkdir "${tmpdir}/data" && chmod -R a+rwx "${tmpdir}"
 
-  # Create Redis container with persistent volume and set the initial password
-  create_container "testpass1" -e REDIS_PASSWORD=foo \
-    -v ${tmpdir}:/var/lib/redis/data:Z
+  # Create Valkey container with persistent volume and set the initial password
+  create_container "testpass1" -e VALKEY_PASSWORD=foo \
+    -v ${tmpdir}:/var/lib/valkey/data:Z
   ct_check_testcase_result $?
   test_connection testpass1 foo
   ct_check_testcase_result $?
   docker stop $(ct_get_cid testpass1) >/dev/null
 
   # Create second container with changed password
-  create_container "testpass2" -e REDIS_PASSWORD=bar \
-    -v ${tmpdir}:/var/lib/redis/data:Z
+  create_container "testpass2" -e VALKEY_PASSWORD=bar \
+    -v ${tmpdir}:/var/lib/valkey/data:Z
   ct_check_testcase_result $?
   test_connection testpass2 bar
   ct_check_testcase_result $?
@@ -140,23 +139,23 @@ function assert_login_access() {
 
 function assert_local_access() {
   local id="$1" ; shift
-  docker exec $(ct_get_cid "$id") bash -c 'redis-cli ping'
+  docker exec $(ct_get_cid "$id") bash -c 'valkey-cli ping'
 }
 
 
 function assert_bind_address() {
   local name="$1"
-  local run_cmd="[ -f \${REDIS_CONF} ] && grep \"^bind 127.0.0.1\" \${REDIS_CONF}"
+  local run_cmd="[ -f \${VALKEY_CONF} ] && grep \"^bind 127.0.0.1\" \${VALKEY_CONF}"
 
-  echo "Checking if bind is set to 127.0.0.1 in redis.conf file."
+  echo "Checking if bind is set to 127.0.0.1 in valkey.conf file."
   docker exec $(ct_get_cid "$name") /bin/bash -c "${run_cmd}"
 }
 
 function assert_no_bind_address() {
   local name="$1"
-  local run_cmd="[ -f \${REDIS_CONF} ] && ! grep \"^bind 127.0.0.1\" \${REDIS_CONF}"
+  local run_cmd="[ -f \${VALKEY_CONF} ] && ! grep \"^bind 127.0.0.1\" \${VALKEY_CONF}"
 
-  echo "Checking if bind is not set in redis.conf file."
+  echo "Checking if bind is not set in valkey.conf file."
   docker exec $(ct_get_cid "$name") /bin/bash -c "${run_cmd}"
 }
 
@@ -164,7 +163,7 @@ function assert_no_bind_address() {
 function assert_container_creation_fails() {
 
   # Time the docker run command. It should fail. If it doesn't fail,
-  # redis will keep running so we kill it with SIGKILL to make sure
+  # valkey will keep running so we kill it with SIGKILL to make sure
   # timeout returns a non-zero value.
   local ret=0
   timeout -s 9 --preserve-status 60s docker run --rm "$@" $IMAGE_NAME >/dev/null || ret=$?
@@ -176,7 +175,7 @@ function assert_container_creation_fails() {
 }
 
 function try_image_invalid_combinations() {
-  assert_container_creation_fails -e REDIS_PASSWORD="pass with space" "$@"
+  assert_container_creation_fails -e VALKEY_PASSWORD="pass with space" "$@"
   ct_check_testcase_result $?
 }
 
@@ -219,14 +218,14 @@ test_scl_usage() {
 }
 
 run_doc_test() {
-  ct_doc_content_old 6379 "REDIS.*PASSWORD" volume
+  ct_doc_content_old 6379 "VALKEY.*PASSWORD" volume
   return $?
 }
 
 function run_tests() {
   local name=$1 ; shift
   local ret
-  envs=${PASS:+"-e REDIS_PASSWORD=$PASS"}
+  envs=${PASS:+"-e VALKEY_PASSWORD=$PASS"}
   PASS=${PASS:-}
   create_container $name $envs
   ret=$?
@@ -234,14 +233,14 @@ function run_tests() {
   # Only check version on rhel/centos builds
   if [ "$OS" != "fedora" ]; then
     echo "  Testing scl usage"
-    test_scl_usage "$name" 'redis-server --version' "$VERSION"
+    test_scl_usage "$name" 'valkey-server --version' "$VERSION"
     ct_check_testcase_result $?
   fi
   if [ "$name" == "bind_address_test" ]; then
     echo "   Testing bind_address test"
     assert_bind_address "$name"
     ct_check_testcase_result $?
-    # Quit test suite. redis container will not response. bind is set to localhost
+    # Quit test suite. valkey container will not response. bind is set to localhost
     return
   fi
   if [ "$name" == "no_bind_address_test" ]; then
@@ -271,7 +270,7 @@ function run_tests() {
     echo "  Local access SUCCESS."
   fi
   echo
-  test_redis "$container_ip" "$PASS"
+  test_valkey "$container_ip" "$PASS"
   ct_check_testcase_result $?
 }
 
@@ -305,5 +304,5 @@ function run_no_bind_address_test() {
 
 ct_init
 
-TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "redis_tests"
+TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "valkey_tests"
 # vim: set tabstop=2:shiftwidth=2:expandtab:

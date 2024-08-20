@@ -15,16 +15,15 @@ VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 TAGS = {
-    "rhel8": "-el8",
     "rhel9": "-el9"
 }
 TAG = TAGS.get(OS, None)
 
 
-class TestRedisImagestreamTemplate:
+class TestValkeyImagestreamTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="redis", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="valkey", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -32,14 +31,14 @@ class TestRedisImagestreamTemplate:
     @pytest.mark.parametrize(
         "template",
         [
-            "redis-ephemeral-template.json",
-            "redis-persistent-template.json"
+            "valkey-ephemeral-template.json",
+            "valkey-persistent-template.json"
         ]
     )
-    def test_redis_imagestream_template(self, template):
+    def test_valkey_imagestream_template(self, template):
         os_name = ''.join(i for i in OS if not i.isdigit())
         assert self.oc_api.deploy_image_stream_template(
-            imagestream_file=f"imagestreams/redis-{os_name}.json",
+            imagestream_file=f"imagestreams/valkey-{os_name}.json",
             template_file=f"examples/{template}",
             app_name=self.oc_api.pod_name_prefix
         )

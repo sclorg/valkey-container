@@ -1,5 +1,5 @@
 # Variables are documented in common/build.sh.
-BASE_IMAGE_NAME = redis
+BASE_IMAGE_NAME = valkey
 VERSIONS = 7
 OPENSHIFT_NAMESPACES = 
 

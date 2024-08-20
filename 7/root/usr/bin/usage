@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cat /usr/share/container-scripts/redis/README.md
-
+cat /usr/share/container-scripts/valkey/README.md
