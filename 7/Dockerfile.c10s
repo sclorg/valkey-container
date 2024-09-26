@@ -63,7 +63,6 @@ RUN getent group valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
     mkdir -p $VALKEY_LIB/data && chown -R valkey:0 $VALKEY_LIB && \
     mkdir -p $VALKEY_RUN && chown -R valkey:0 $VALKEY_RUN && \
     chmod -R ug+rwX $VALKEY_RUN && \
-    chmod -R ug+rwX $VALKEY_LIB && \
     [[ "$(id valkey)" == "uid=1001(valkey)"* ]]
 
 # Get prefix path and path to scripts rather than hard-code them in scripts
