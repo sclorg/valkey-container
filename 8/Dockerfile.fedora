@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-core:40
+FROM quay.io/fedora/s2i-core:41
 
 # Valkey image based on Software Collections packages
 #
@@ -7,7 +7,7 @@ FROM quay.io/fedora/s2i-core:40
 # Environment:
 #  * $VALKEY_PASSWORD - Database password
 
-ENV VALKEY_VERSION=7 \
+ENV VALKEY_VERSION=8 \
     HOME=/var/lib/valkey \
     NAME=valkey
 
@@ -58,13 +58,12 @@ RUN getent group  valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
     dnf install -y --setopt=tsflags=nodocs --nogpgcheck $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*' && \
-    valkey-server --version | grep -qe "^Server v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION" && \
+    valkey-server --version | grep -qe "^Valkey server v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION" && \
     mkdir -p $VALKEY_LIB/data && chown -R valkey:0 $VALKEY_LIB && \
     mkdir -p $VALKEY_RUN && chown -R valkey:0 $VALKEY_RUN && \
     chmod -R ug+rwX $VALKEY_RUN && \
     chmod -R ug+rwX $VALKEY_LIB && \
     [[ "$(id valkey)" == "uid=1001(valkey)"* ]]
-
 
 COPY root /
 
