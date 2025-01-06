@@ -1,0 +1,2 @@
+dir ${VALKEY_DATADIR}
+unixsocket ${VALKEY_SOCK}
