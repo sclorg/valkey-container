@@ -59,7 +59,7 @@ RUN getent group valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*' && \
-    valkey-server --version | grep -qe "^Server v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION" && \
+    valkey-server --version | grep -qe "^Valkey server v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION" && \
     mkdir -p $VALKEY_LIB/data && chown -R valkey:0 $VALKEY_LIB && \
     mkdir -p $VALKEY_RUN && chown -R valkey:0 $VALKEY_RUN && \
     chmod -R ug+rwX $VALKEY_RUN && \
