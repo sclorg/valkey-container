@@ -14,13 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "7/Dockerfile.fedora"
+          - dockerfile: "8/Dockerfile.fedora"
             registry_namespace: "fedora"
             tag: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            image_name: "valkey-7"
-            docker_context: "7"
+            image_name: "valkey-8"
+            docker_context: "8"
 
           - dockerfile: "7/Dockerfile.c10s"
             registry_namespace: "sclorg"

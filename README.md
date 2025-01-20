@@ -6,6 +6,7 @@ Valkey container image
 Images available on Quay are:
 * CentOS Stream 10 [valkey-6](https://quay.io/repository/sclorg/valkey-7-c10s)
 * Fedora [valkey-7](https://quay.io/repository/fedora/valkey-7)
+* Fedora [valkey-8](https://quay.io/repository/fedora/valkey-8)
 
 This repository contains Dockerfiles for valkey container image.
 Users can choose between RHEL, Fedora and CentOS based images.
@@ -20,6 +21,7 @@ Versions
 --------
 valkey version currently provided are:
 * [valkey-7](7)
+* [valkey-8](8)
 
 CentOS versions currently supported are:
 * CentOS Stream 10
@@ -58,6 +60,9 @@ Usage
 
 For information about usage of Dockerfile for valkey 7,
 see [usage documentation](7).
+
+For information about usage of Dockerfile for valkey 8,
+see [usage documentation](8).
 
 Test
 ----

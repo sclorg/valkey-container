@@ -1,0 +1,15 @@
+---
+- name: valkey
+  pretty_name: Valkey
+  sample_repo: ""
+  category: database
+  description: >-
+    Provides a Valkey APP_VERSION database on DISTRO_NAME. For more information
+    about using this database image, including OpenShift considerations, see 
+    https://github.com/sclorg/valkey-container/tree/master/APP_VERSION/README.md.
+  imagestream_files:
+  - filename: valkey-centos.json
+    latest: "7-el10"
+    distros:
+      - name: CentOS Stream 10
+        app_versions: [7]
