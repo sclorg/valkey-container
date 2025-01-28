@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-core-c10s:c10s
+FROM ubi10/s2i-core
 
 # Valkey image based on Software Collections packages
 #
@@ -27,10 +27,10 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="6379:valkey" \
       io.openshift.tags="database,valkey,valkey,valkey-$VALKEY_VERSION" \
       com.redhat.component="valkey-$VALKEY_VERSION-container" \
-      name="sclorg/valkey-$VALKEY_VERSION-c10s" \
+      name="rhel10/valkey-$VALKEY_VERSION" \
       version="$VALKEY_VERSION" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel" \
-      usage="podman run -d --name valkey_database -p 6379:6379 quay.io/sclorg/valkey-$VALKEY_VERSION-c10s" \
+      usage="podman run -d --name valkey_database -p 6379:6379 rhel10/valkey-$VALKEY_VERSION" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 EXPOSE 6379
