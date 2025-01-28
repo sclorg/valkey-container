@@ -22,13 +22,13 @@ jobs:
             image_name: "valkey-8"
             docker_context: "8"
 
-          - dockerfile: "7/Dockerfile.c10s"
+          - dockerfile: "8/Dockerfile.c10s"
             registry_namespace: "sclorg"
             tag: "c10s"
-            image_name: "valkey-7-c10s"
+            image_name: "valkey-8-c10s"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            docker_context: "7"
+            docker_context: "8"
 
     steps:
       - name: Build and push to quay.io registry
