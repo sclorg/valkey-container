@@ -23,6 +23,9 @@ valkey version currently provided are:
 * [valkey-7](7)
 * [valkey-8](8)
 
+RHEL versions currently supported:
+* RHEL10
+
 CentOS versions currently supported are:
 * CentOS Stream 10
 

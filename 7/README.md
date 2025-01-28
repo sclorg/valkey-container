@@ -84,4 +84,5 @@ See also
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/valkey-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS Stream 10 it's `Dockerfile.c10s` and the Fedora Dockerfile is called Dockerfile.fedora.
+Dockerfile for CentOS Stream 10 it's `Dockerfile.c10s`,
+Dockerfile for RHEL10 it's `Dockerfile.rhel10`,and the Fedora Dockerfile is called Dockerfile.fedora.
