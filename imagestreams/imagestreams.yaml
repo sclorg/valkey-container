@@ -9,7 +9,20 @@
     https://github.com/sclorg/valkey-container/tree/master/APP_VERSION/README.md.
   imagestream_files:
   - filename: valkey-centos.json
-    latest: "7-el10"
+    latest: "8-el10"
     distros:
       - name: CentOS Stream 10
-        app_versions: [7]
+        app_versions: [8]
+
+  - filename: valkey-rhel.json
+    latest: "8-el10"
+    distros:
+      - name: RHEL 10
+        app_versions: [8]
+
+  - filename: valkey-rhel-aarch64.json
+    latest: "8-el10"
+    distros:
+      - name: RHEL 10
+        app_versions: [8]
+...

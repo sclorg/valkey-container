@@ -19,7 +19,7 @@ OS = os.getenv("TARGET")
 class TestRedisDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="valkey", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="valkey", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -32,7 +32,6 @@ class TestRedisDeployTemplate:
         ]
     )
     def test_valkey_template_inside_cluster(self, template):
-        short_version = VERSION.replace(".", "")
         assert self.oc_api.deploy_template_with_image(
             image_name=IMAGE_NAME,
             template=f"examples/{template}",
@@ -46,7 +45,7 @@ class TestRedisDeployTemplate:
 
         assert self.oc_api.is_pod_running(pod_name_prefix=self.oc_api.pod_name_prefix)
         assert self.oc_api.check_command_internal(
-            image_name=f"registry.redhat.io/{OS}/valkey-{short_version}",
+            image_name=f"registry.redhat.io/{OS}/valkey-{VERSION}",
             service_name=self.oc_api.pod_name_prefix,
             cmd="timeout 15 valkey-cli -h <IP> -a testp ping",
             expected_output="PONG"
