@@ -14,6 +14,10 @@ source "${THISDIR}/test-lib-remote-openshift.sh"
 
 function test_valkey_integration() {
   local service_name=valkey
+  local tag="-el9"
+  if [ "${OS}" == "rhel10" ]; then
+    tag="-el10"
+  fi
   TEMPLATES="valkey-ephemeral-template.json
   valkey-persistent-template.json"
   for template in $TEMPLATES; do
@@ -27,7 +31,6 @@ function test_valkey_integration() {
   done
 }
 
- Check the imagestream
 function test_valkey_imagestream() {
   local tag="-el9"
   if [ "${OS}" == "rhel10" ]; then
@@ -41,7 +44,7 @@ function test_valkey_imagestream() {
 }
 
 function test_latest_imagestreams() {
-  info "Testing the latest version in imagestreams"
+  echo "Testing the latest version in imagestreams"
   # Switch to root directory of a container
   pushd "${THISDIR}/../.." >/dev/null
   ct_check_latest_imagestreams
