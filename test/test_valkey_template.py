@@ -32,6 +32,8 @@ class TestRedisDeployTemplate:
         ]
     )
     def test_valkey_template_inside_cluster(self, template):
+        if OS == "rhel9":
+            pytest.skip("Not supported in RHEL9 yet.")
         assert self.oc_api.deploy_template_with_image(
             image_name=IMAGE_NAME,
             template=f"examples/{template}",

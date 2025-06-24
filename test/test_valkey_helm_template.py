@@ -16,7 +16,7 @@ OS = os.getenv("TARGET")
 
 TAG = TAGS.get(OS)
 
-class TestHelmRedisPersistent:
+class TestHelmValkeyPersistent:
 
     def setup_method(self):
         package_name = "redhat-valkey-persistent"
@@ -31,6 +31,8 @@ class TestHelmRedisPersistent:
         self.hc_api.delete_project()
 
     def test_package_persistent_by_helm_chart_test(self):
+        if OS == "rhel9":
+            pytest.skip("Not supported in RHEL9 yet.")
         self.hc_api.package_name = "redhat-valkey-imagestreams"
         self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

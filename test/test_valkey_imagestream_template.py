@@ -36,6 +36,8 @@ class TestValkeyImagestreamTemplate:
         ]
     )
     def test_valkey_imagestream_template(self, template):
+        if OS == "rhel9":
+            pytest.skip("Not supported in RHEL9 yet.")
         os_name = ''.join(i for i in OS if not i.isdigit())
         assert self.oc_api.deploy_image_stream_template(
             imagestream_file=f"imagestreams/valkey-{os_name}.json",
