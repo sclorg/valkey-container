@@ -14,6 +14,10 @@ source "${THISDIR}/test-lib-remote-openshift.sh"
 
 function test_valkey_integration() {
   local service_name=valkey
+  if [[ "${OS}" == "rhel9" ]]; then
+    echo "RHEL9 imagestream is not supported yet."
+    return
+  fi
   local tag="-el9"
   if [ "${OS}" == "rhel10" ]; then
     tag="-el10"
@@ -32,6 +36,10 @@ function test_valkey_integration() {
 }
 
 function test_valkey_imagestream() {
+  if [[ "${OS}" == "rhel9" ]]; then
+    echo "RHEL9 imagestream is not supported yet."
+    return
+  fi
   local tag="-el9"
   if [ "${OS}" == "rhel10" ]; then
     tag="-el10"
