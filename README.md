@@ -9,7 +9,7 @@ Images available on Quay are:
 * Fedora [valkey-8](https://quay.io/repository/fedora/valkey-8)
 
 This repository contains Dockerfiles for valkey container image.
-Users can choose between RHEL, Fedora and CentOS based images.
+Users can choose between RHEL, Fedora and CentOS Stream based images.
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
@@ -26,7 +26,7 @@ valkey version currently provided are:
 RHEL versions currently supported:
 * RHEL10
 
-CentOS versions currently supported are:
+CentOS Stream versions currently supported are:
 * CentOS Stream 10
 
 
