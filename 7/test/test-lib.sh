@@ -1132,7 +1132,7 @@ ct_check_latest_imagestreams() {
     local latest_version=
     local test_lib_dir=
 
-    # We only maintain imagestreams for RHEL and CentOS (Community)
+    # We only maintain imagestreams for RHEL and CentOS Stream (Community)
     if [[ "$OS" =~ ^fedora.* ]] ; then
       echo "Imagestreams for Fedora are not maintained, skipping ct_check_latest_imagestreams"
       return 0
