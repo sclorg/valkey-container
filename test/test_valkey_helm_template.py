@@ -1,27 +1,18 @@
-import os
-
-import pytest
-from pathlib import Path
-
 from container_ci_suite.helm import HelmChartsAPI
 
-from constants import TAGS
+from conftest import VARS, skip_valkey_for_rhel9
 
-test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
-
-VERSION = os.getenv("VERSION")
-IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
-
-
-TAG = TAGS.get(OS)
 
 class TestHelmValkeyPersistent:
 
     def setup_method(self):
         package_name = "redhat-valkey-persistent"
-        path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
+        self.hc_api = HelmChartsAPI(
+            path=VARS.TEST_DIR,
+            package_name=package_name,
+            tarball_dir=VARS.TEST_DIR,
+            shared_cluster=True
+        )
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -31,8 +22,7 @@ class TestHelmValkeyPersistent:
         self.hc_api.delete_project()
 
     def test_package_persistent_by_helm_chart_test(self):
-        if OS == "rhel9":
-            pytest.skip("Not supported in RHEL9 yet.")
+        skip_valkey_for_rhel9()
         self.hc_api.package_name = "redhat-valkey-imagestreams"
         self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -40,7 +30,7 @@ class TestHelmValkeyPersistent:
         self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "valkey_version": f"{VERSION}{TAG}",
+                "valkey_version": f"{VARS.VERSION}{VARS.TAG}",
                 "namespace": self.hc_api.namespace
             }
         )
