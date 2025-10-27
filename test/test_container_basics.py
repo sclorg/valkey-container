@@ -32,14 +32,12 @@ class TestValkeyBasicsContainer:
         Function checks if running container with wrong PASSWORD
         with spaces in the VALKEY_PASSWORD really fails
         It should fail. If it doesn't fail,
-
         """
         with pytest.raises(subprocess.CalledProcessError):
             PodmanCLIWrapper.call_podman_command(
                 cmd=f"run --rm -e VALKEY_PASSWORD=\"pass with space\" {VARS.IMAGE_NAME}",
                 return_output=False
             )
-            #assert not result, "The command -e VALKEY_PASSWORD=\"pass with space\" has to fail"
 
     def test_run_change_password(self):
         """
