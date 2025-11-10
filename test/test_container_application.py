@@ -43,20 +43,19 @@ class TestValkeyApplicationContainer:
         assert cid
         cip = self.s2i_app.get_cip(cid_file_name=test_name)
         assert cip
-        testing_password = f"-a {password}" if password != "" else ""
+        testing_password = f"-a {password}" if password else ""
         valkey_cmd = f"valkey-cli -h {cip} {testing_password}"
         # Test with valkey-cli returns 'PONG' from the different container
         valkey_output = PodmanCLIWrapper.podman_run_command_and_remove(
-            cid_file_name=VARS.IMAGE_NAME, cmd=f"{valkey_cmd} ping", return_output=True
+            cid_file_name=VARS.IMAGE_NAME, cmd=f"{valkey_cmd} ping"
         )
         assert "PONG" in valkey_output, f"The command {valkey_cmd} should return PONG"
         # The password '_foo' has to fail. It was not initiated
         valkey_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME,
             cmd=f"{valkey_cmd}_foo ping",
-            return_output=False,
         )
-        assert valkey_output == 0, (
+        assert "PONG" not in valkey_output, (
             'The command -e VALKEY_PASSWORD="pass_foo" has to fail'
         )
         # The valkey-cli should return PONG from the running container
