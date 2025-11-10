@@ -1,8 +1,6 @@
 import os
 import sys
 
-import pytest
-
 from pathlib import Path
 from collections import namedtuple
 
@@ -17,9 +15,7 @@ TAGS = {
     "rhel10": "-el10",
 }
 
-Vars = namedtuple(
-    "Vars", ["OS", "VERSION", "IMAGE_NAME", "TEST_DIR", "TAG"]
-)
+Vars = namedtuple("Vars", ["OS", "VERSION", "IMAGE_NAME", "TEST_DIR", "TAG"])
 VERSION = os.getenv("VERSION")
 OS = os.getenv("TARGET").lower()
 
@@ -30,8 +26,3 @@ VARS = Vars(
     TEST_DIR=Path(__file__).parent.absolute(),
     TAG=TAGS.get(OS),
 )
-
-
-def skip_valkey_for_rhel9():
-    if VARS.OS == "rhel9":
-        pytest.skip("Not supported in RHEL9 yet.")
