@@ -11,18 +11,27 @@
   - filename: valkey-centos.json
     latest: "8-el10"
     distros:
+      - name: CentOS Stream 9
+        app_versions: [8]
+
       - name: CentOS Stream 10
         app_versions: [8]
 
   - filename: valkey-rhel.json
     latest: "8-el10"
     distros:
+      - name: RHEL 9
+        app_versions: [8]
+
       - name: RHEL 10
         app_versions: [8]
 
   - filename: valkey-rhel-aarch64.json
     latest: "8-el10"
     distros:
+      - name: RHEL 9
+        app_versions: [8]
+
       - name: RHEL 10
         app_versions: [8]
 ...

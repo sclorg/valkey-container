@@ -10,6 +10,24 @@
   "spec": {
     "tags": [
       {
+        "name": "8-el9",
+        "annotations": {
+          "openshift.io/display-name": "Valkey 8 (RHEL 9)",
+          "openshift.io/provider-display-name": "Red Hat, Inc.",
+          "description": "Provides a Valkey 8 database on RHEL 9. For more information about using this database image, including OpenShift considerations, see  https://github.com/sclorg/valkey-container/tree/master/8/README.md.",
+          "iconClass": "icon-valkey",
+          "tags": "database,valkey",
+          "version": "8"
+        },
+        "from": {
+          "kind": "DockerImage",
+          "name": "registry.redhat.io/rhel9/valkey-8:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
+        }
+      },
+      {
         "name": "8-el10",
         "annotations": {
           "openshift.io/display-name": "Valkey 8 (RHEL 10)",
