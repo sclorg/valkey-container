@@ -2,7 +2,7 @@ import pytest
 
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import VARS, skip_for_rhel9
+from conftest import VARS
 
 
 class TestValkeyImagestreamTemplate:
@@ -19,7 +19,6 @@ class TestValkeyImagestreamTemplate:
         ["valkey-ephemeral-template.json", "valkey-persistent-template.json"],
     )
     def test_valkey_imagestream_template(self, template):
-        skip_for_rhel9()
         os_name = "".join(i for i in VARS.OS if not i.isdigit())
         assert self.oc_api.deploy_image_stream_template(
             imagestream_file=f"imagestreams/valkey-{os_name}.json",

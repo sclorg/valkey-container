@@ -1,6 +1,6 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import VARS, skip_for_rhel9
+from conftest import VARS
 
 
 class TestHelmValkeyPersistent:
@@ -22,7 +22,6 @@ class TestHelmValkeyPersistent:
         self.hc_api.delete_project()
 
     def test_package_persistent_by_helm_chart_test(self):
-        skip_for_rhel9()
         self.hc_api.package_name = "redhat-valkey-imagestreams"
         self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

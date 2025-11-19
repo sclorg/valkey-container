@@ -2,7 +2,7 @@ import pytest
 
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import VARS, skip_for_rhel9
+from conftest import VARS
 
 
 class TestRedisDeployTemplate:
@@ -19,7 +19,6 @@ class TestRedisDeployTemplate:
         ["valkey-ephemeral-template.json", "valkey-persistent-template.json"],
     )
     def test_valkey_template_inside_cluster(self, template):
-        skip_for_rhel9()
         assert self.oc_api.deploy_template_with_image(
             image_name=VARS.IMAGE_NAME,
             template=f"examples/{template}",
