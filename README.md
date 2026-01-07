@@ -8,6 +8,8 @@ Images available on Quay are:
 * Fedora [valkey-7](https://quay.io/repository/fedora/valkey-7)
 * Fedora [valkey-8](https://quay.io/repository/fedora/valkey-8)
 
+All published images are multi-arch (amd64 and arm64).
+
 This repository contains Dockerfiles for valkey container image.
 Users can choose between RHEL, Fedora and CentOS Stream based images.
 
