@@ -55,7 +55,7 @@ ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/valkey \
 RUN getent group valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
     usermod -l valkey -aG valkey -c 'Valkey Server' default &> /dev/null && \
 # Install gettext for envsubst command
-    INSTALL_PKGS="policycoreutils gettext bind9.18-utils valkey" && \
+    INSTALL_PKGS="policycoreutils gettext bind-utils valkey" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*' && \
