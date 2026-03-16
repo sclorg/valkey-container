@@ -57,9 +57,8 @@ class TestValkeyBasicsContainer:
             cid_file_name=cid_file_name,
             container_args=f"-e VALKEY_PASSWORD=foo -v {data_dir}/data:/var/lib/valkey/data:Z",
         )
-        cid1 = self.app.get_cid(cid_file_name=cid_file_name)
-        cip1 = self.app.get_cip(cid_file_name=cid_file_name)
-        assert cip1
+        cip1, cid1 = self.app.get_cip_cid(cid_file_name=cid_file_name)
+        assert cip1 and cid1
         # The valkey-cli command should response with 'PONG'
         valkey_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME,
@@ -74,9 +73,8 @@ class TestValkeyBasicsContainer:
             cid_file_name=cid_file_name,
             container_args=f"-e VALKEY_PASSWORD=bar -v {data_dir}/data:/var/lib/valkey/data:Z",
         )
-        cid2 = self.app.get_cid(cid_file_name=cid_file_name)
-        cip2 = self.app.get_cip(cid_file_name=cid_file_name)
-        assert cip2
+        cip2, cid2 = self.app.get_cip_cid(cid_file_name=cid_file_name)
+        assert cip2 and cid2
         # The valkey-cli command should responds with 'PONG'
         valkey_output = PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME, cmd=f"valkey-cli -h {cip2} -a bar ping"

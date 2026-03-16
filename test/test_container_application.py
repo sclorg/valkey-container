@@ -39,10 +39,8 @@ class TestValkeyApplicationContainer:
         assert self.s2i_app.create_container(
             cid_file_name=test_name, container_args=container_arg
         )
-        cid = self.s2i_app.get_cid(cid_file_name=test_name)
-        assert cid
-        cip = self.s2i_app.get_cip(cid_file_name=test_name)
-        assert cip
+        cip, cid = self.s2i_app.get_cip_cid(cid_file_name=test_name)
+        assert cip and cid
         testing_password = f"-a {password}" if password else ""
         valkey_cmd = f"valkey-cli -h {cip} {testing_password}"
         # Test with valkey-cli returns 'PONG' from the different container
@@ -101,10 +99,8 @@ class TestValkeyApplicationContainer:
             cid_file_name=cid_file_name,
             container_args=f"--user=100001 -e VALKEY_PASSWORD=pass {bind_address}",
         )
-        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
-        assert cid
-        cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
-        assert cip
+        cip, cid = self.s2i_app.get_cip_cid(cid_file_name=cid_file_name)
+        assert cip and cid
         assert (
             PodmanCLIWrapper.podman_exec_shell_command(
                 cid_file_name=cid, cmd="test -f ${VALKEY_CONF}", return_output=False
