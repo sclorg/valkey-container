@@ -21,16 +21,17 @@ For more information about concepts used in these container images, see the
 
 Versions
 --------
-valkey version currently provided are:
-* [valkey-7](7)
-* [valkey-8](8)
-
-RHEL versions currently supported:
-* RHEL10
-
-CentOS Stream versions currently supported are:
-* CentOS Stream 10
-
+Currently supported versions are visible in the following table, expand an entry to see its container registry address.
+<!--
+Table start
+-->
+||CentOS Stream 10|Fedora|RHEL 9|RHEL 10|
+|:--|:--:|:--:|:--:|:--:|
+|7|||||
+|8|<details><summary>✓</summary>`quay.io/sclorg/valkey-8-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/valkey-8`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/valkey-8`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/valkey-8`</details>|
+<!--
+Table end
+-->
 
 Installation
 ------------
