@@ -1,0 +1,61 @@
+version: 1
+
+specs:
+  distroinfo:
+    fedora41:
+      distros:
+        - fedora-41-x86_64
+      s2i_base: quay.io/fedora/s2i-core:41
+      org: "fedora"
+      prod: "fedora"
+      img_name: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+      pkgs: "valkey"
+      usage_image: "quay.io/{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+
+    rhel9:
+      distros:
+        - rhel-9-x86_64
+      s2i_base: ubi9/s2i-core
+      org: "rhel9"
+      prod: "rhel9"
+      img_name: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+      pkgs: "policycoreutils gettext bind9.18-utils valkey"
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel"
+      usage_image: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+
+    rhel10:
+      distros:
+        - rhel-10-x86_64
+      s2i_base: ubi10/s2i-core
+      org: "rhel10"
+      prod: "rhel10"
+      img_name: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+      pkgs: "policycoreutils gettext bind valkey"
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel"
+      usage_image: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}"
+
+    c10s:
+      distros:
+        - centos-stream-10-x86_64
+      s2i_base: quay.io/sclorg/s2i-core-c10s:c10s
+      org: "sclorg"
+      prod: "c10s"
+      img_name: "{{ spec.org }}/{{ spec.name }}-{{ spec.version }}-{{ spec.prod }}"
+      pkgs: "policycoreutils gettext bind valkey"
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel"
+      usage_image: "quay.io/{{ spec.org }}/{{ spec.name }}-{{ spec.version }}-{{ spec.prod }}"
+
+  version:
+    "8":
+      version: "8"
+      name: "valkey"
+      version_check: "Valkey server"
+
+matrix:
+  include:
+    - version: "8"
+      distros:
+        - fedora-41-x86_64
+        - rhel-9-x86_64
+        - rhel-10-x86_64
+        - centos-stream-10-x86_64

@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-core:39
+FROM {{ spec.s2i_base }}
 
 # Valkey image based on Software Collections packages
 #
@@ -7,9 +7,9 @@ FROM quay.io/fedora/s2i-core:39
 # Environment:
 #  * $VALKEY_PASSWORD - Database password
 
-ENV VALKEY_VERSION=7 \
+ENV VALKEY_VERSION={{ spec.version }} \
     HOME=/var/lib/valkey \
-    NAME=valkey
+    NAME={{ spec.name }}
 
 ENV SUMMARY="Valkey in-memory data structure store, used as database, cache and message broker" \
     DESCRIPTION="Valkey $VALKEY_VERSION available as container, is an advanced key-value store. \
@@ -25,11 +25,12 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Valkey $VALKEY_VERSION" \
       io.openshift.expose-services="6379:valkey" \
-      io.openshift.tags="database,valkey,valkey$VALKEY_VERSION,valkey-$VALKEY_VERSION" \
-      com.redhat.component="$NAME" \
-      name="fedora/$NAME-$VALKEY_VERSION" \
+      io.openshift.tags="database,valkey,valkey,valkey-$VALKEY_VERSION" \
+      com.redhat.component="valkey-$VALKEY_VERSION-container" \
+      name="{{ spec.img_name }}" \
       version="$VALKEY_VERSION" \
-      usage="podman run -d --name valkey_database -p 6379:6379 quay.io/fedora/$NAME-$VALKEY_VERSION" \
+{% if spec.license_terms %}      com.redhat.license_terms="{{ spec.license_terms }}" \
+{% endif %}      usage="podman run -d --name valkey_database -p 6379:6379 {{ spec.usage_image }}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 EXPOSE 6379
@@ -42,30 +43,32 @@ ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/valkey \
     VALKEY_LIB=/var/lib/valkey \
     VALKEY_RUN=/run/valkey
 
-# Create user for valkey that has known UID
+
+# Create user for Valkey that has known UID
 # We need to do this before installing the RPMs which would create user with random UID
 # The UID is the one used by the default user from the parent layer (1001),
 # and since the user exists already, do not create a new one, but only rename
 # the existing
-# This image must forever use UID 1001 for valkey user so our volumes are
+# This image must forever use UID 1001 for Valkey user so our volumes are
 # safe in the future. This should *never* change, the last test is there
 # to make sure of that.
-RUN getent group  valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
-    usermod -l valkey -aG valkey -c 'Server' default &> /dev/null && \
+RUN getent group valkey &> /dev/null || groupadd -r valkey &> /dev/null && \
+    usermod -l valkey -aG valkey -c 'Valkey Server' default &> /dev/null && \
 # Install gettext for envsubst command
-    dnf install -y dnf-utils gettext policycoreutils && \
-    INSTALL_PKGS="valkey" && \
-    dnf install -y --setopt=tsflags=nodocs --nogpgcheck $INSTALL_PKGS && \
+    INSTALL_PKGS="{{ spec.pkgs }}" && \
+    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    dnf -y clean all --enablerepo='*'
-RUN valkey-server --version
-RUN valkey-server --version | grep -qe "^Server v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION"
-RUN mkdir -p $VALKEY_LIB/data && chown -R valkey:0 $VALKEY_LIB
-RUN mkdir -p $VALKEY_RUN && chown -R valkey:0 $VALKEY_RUN
-RUN chmod -R ug+rwX $VALKEY_RUN
-RUN chmod -R ug+rwX $VALKEY_LIB
-RUN [[ "$(id valkey)" == "uid=1001(valkey)"* ]]
+    dnf -y clean all --enablerepo='*' && \
+    valkey-server --version | grep -qe "^{{ spec.version_check }} v=$VALKEY_VERSION\." && echo "Found VERSION $VALKEY_VERSION" && \
+    mkdir -p $VALKEY_LIB/data && chown -R valkey:0 $VALKEY_LIB && \
+    mkdir -p $VALKEY_RUN && chown -R valkey:0 $VALKEY_RUN && \
+    chmod -R ug+rwX $VALKEY_RUN && \
+    [[ "$(id valkey)" == "uid=1001(valkey)"* ]]
 
+# Get prefix path and path to scripts rather than hard-code them in scripts
+ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/valkey \
+    VALKEY_PREFIX=/usr \
+    VALKEY_CONF=/etc/valkey/valkey.conf
 
 COPY root /
 

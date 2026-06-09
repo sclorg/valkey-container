@@ -1,0 +1,76 @@
+# Manifest for image directories creation
+# every dest path will be prefixed by $DESTDIR/$version
+
+# Files containing distgen directives
+DISTGEN_RULES:
+  - src: src/root/usr/share/container-scripts/valkey/README.md
+    dest: root/usr/share/container-scripts/valkey/README.md
+
+# Files containing distgen directives, which are used for each
+# (distro, version) combination not excluded in multispec
+DISTGEN_MULTI_RULES:
+  - src: src/Dockerfile.fedora
+    dest: Dockerfile.fedora
+
+  - src: src/Dockerfile
+    dest: Dockerfile.rhel9
+
+  - src: src/Dockerfile
+    dest: Dockerfile.rhel10
+
+  - src: src/Dockerfile
+    dest: Dockerfile.c10s
+
+
+# Files to copy
+COPY_RULES:
+  - src: src/root/usr/bin/container-entrypoint
+    dest: root/usr/bin/container-entrypoint
+    mode: "0755"
+
+  - src: src/root/usr/bin/run-valkey
+    dest: root/usr/bin/run-valkey
+    mode: "0755"
+
+  - src: src/root/usr/bin/usage
+    dest: root/usr/bin/usage
+    mode: "0755"
+
+  - src: src/root/usr/libexec/container-setup
+    dest: root/usr/libexec/container-setup
+    mode: "0755"
+
+  - src: src/root/usr/share/container-scripts/valkey/base.conf.template
+    dest: root/usr/share/container-scripts/valkey/base.conf.template
+
+  - src: src/root/usr/share/container-scripts/valkey/common.sh
+    dest: root/usr/share/container-scripts/valkey/common.sh
+
+  - src: src/root/usr/share/container-scripts/valkey/helpers.sh
+    dest: root/usr/share/container-scripts/valkey/helpers.sh
+
+  - src: src/root/usr/share/container-scripts/valkey/password.conf.template
+    dest: root/usr/share/container-scripts/valkey/password.conf.template
+
+  - src: src/root/usr/share/container-scripts/valkey/post-init.sh
+    dest: root/usr/share/container-scripts/valkey/post-init.sh
+
+  - src: src/root/usr/share/container-scripts/valkey/validate-variables.sh
+    dest: root/usr/share/container-scripts/valkey/validate-variables.sh
+
+
+# Symbolic links
+# This section is the last one on purpose because the generator.py
+# does not allow dead symlinks.
+SYMLINK_RULES:
+  - src: root/usr/share/container-scripts/valkey/README.md
+    dest: README.md
+
+  - src: ../test
+    dest: test
+
+  - src: ../examples
+    dest: examples
+
+  - src: ../imagestreams
+    dest: imagestreams

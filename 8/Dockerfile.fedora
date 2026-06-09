@@ -27,9 +27,9 @@ LABEL summary="$SUMMARY" \
       io.openshift.expose-services="6379:valkey" \
       io.openshift.tags="database,valkey,valkey$VALKEY_VERSION,valkey-$VALKEY_VERSION" \
       com.redhat.component="$NAME" \
-      name="fedora/$NAME-$VALKEY_VERSION" \
+      name="fedora/valkey-8" \
       version="$VALKEY_VERSION" \
-      usage="podman run -d --name valkey_database -p 6379:6379 quay.io/fedora/$NAME-$VALKEY_VERSION" \
+      usage="podman run -d --name valkey_database -p 6379:6379 quay.io/fedora/valkey-8" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 EXPOSE 6379
